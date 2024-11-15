@@ -46,6 +46,11 @@ function App() {
     setIdFortodo((prevIdFortodo) => prevIdFortodo + 1);
   }
 
+  function deleteTodo(id) {
+    //console.log("Deleting Todo for Id : " + id);
+    setTodos([...todos].filter((todo) => todo.id !== id)); // create copy, filter out object and update state
+  }
+
   function handleInput(event) {
     setTodoInput(event.target.value);
   }
@@ -69,7 +74,7 @@ function App() {
                 <input type="checkbox" />
                 <span className="todo-item-label">{todo.title}</span>
               </div>
-              <button className="x-button">
+              <button onClick={() => deleteTodo(todo.id)} className="x-button">
                 <svg
                   className="x-button-icon"
                   fill="none"
