@@ -19,16 +19,52 @@ function App() {
       isComplete: false,
     },
   ]);
+
+  const [todoInput, setTodoInput] = useState(""); // for form input
+  const [idFortodo, setIdFortodo] = useState(4); // for form input
+
+  function addTodo(event) {
+    event.preventDefault();
+
+    if (todoInput.trim().length === 0) {
+      return;
+    }
+
+    //using spread operator to add // Update todos with an array
+    setTodos([
+      ...todos,
+      {
+        id: idFortodo, // new id
+        title: todoInput, //updated input
+        isComplete: false,
+      },
+    ]);
+
+    setTodoInput(""); // when update make todo value blank
+
+    //setIdFortodo(idFortodo + 1);
+    setIdFortodo((prevIdFortodo) => prevIdFortodo + 1);
+  }
+
+  function handleInput(event) {
+    setTodoInput(event.target.value);
+  }
   return (
     <div className="todo-app-container">
       <div className="todo-app">
         <h2>Todo App</h2>
-        <form action="">
-          <input type="text" className="todo-input" placeholder="Enter Data" />
+        <form action="#" onSubmit={addTodo}>
+          <input
+            type="text"
+            value={todoInput}
+            onChange={handleInput}
+            className="todo-input"
+            placeholder="Enter Data"
+          />
         </form>
         <ul className="todo-list">
           {todos.map((todo) => (
-            <li className="todo-item-container">
+            <li className="todo-item-container" key={todo.id}>
               <div className="todo-item">
                 <input type="checkbox" />
                 <span className="todo-item-label">{todo.title}</span>
