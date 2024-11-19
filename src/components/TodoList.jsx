@@ -1,5 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import RemainingItems from "./RemainingItems";
+import TodoCheckAll from "./TodoCheckAll";
+import TodoClearCompleted from "./TodoClearCompleted";
+import TodoFilters from "./TodoFilters";
+
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
   completeTodo: PropTypes.func.isRequired,
@@ -7,13 +12,18 @@ TodoList.propTypes = {
   updateTodo: PropTypes.func.isRequired,
   cancelEdit: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  remainingItems: PropTypes.func.isRequired,
+  checkAll: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
+  filters: PropTypes.func.isRequired,
 };
 
 function TodoList(props) {
+  const [filter, setFilter] = useState("all");
   return (
     <>
       <ul className="todo-list">
-        {props.todos.map((todo) => (
+        {props.filters(filter).map((todo, index) => (
           <li className="todo-item-container" key={todo.id}>
             <div className="todo-item">
               <input
@@ -71,20 +81,18 @@ function TodoList(props) {
 
       <div className="check-all-container">
         <div>
-          <div className="button">Check All</div>
+          <TodoCheckAll checkAll={props.checkAll} />
         </div>
-        <span>3 items remaining</span>
+        <RemainingItems remainingItems={props.remainingItems} />
       </div>
       <div className="other-buttons-container">
+        <TodoFilters
+          filters={props.filters}
+          filter={filter}
+          setFilter={setFilter}
+        />
         <div>
-          <button className="button filter-button filter-button-active">
-            All
-          </button>
-          <button className="button filter-button">Active</button>
-          <button className="button filter-button">Completed</button>
-        </div>
-        <div>
-          <button className="button">Clear completed</button>
+          <TodoClearCompleted clearCompleted={props.clearCompleted} />
         </div>
       </div>
     </>
