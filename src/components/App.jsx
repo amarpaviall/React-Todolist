@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NoTodos from "./NoTodos";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
@@ -6,6 +6,8 @@ import "../App.css";
 import "../reset.css";
 
 function App() {
+  const [name, setName] = useState("");
+  const nameInputEl = useRef(null);
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -121,9 +123,28 @@ function App() {
       return todos.filter((todo) => todo.isComplete);
     }
   }
+
+  useEffect(() => {
+    //console.log("use effect");
+    nameInputEl.current.focus(); // focus on current element that is name input
+  }, []); // Empty dependency array means this runs once when mounted
   return (
     <div className="todo-app-container">
       <div className="todo-app">
+        <div className="name-container">
+          <h2>What is your Name?</h2>
+          <form action="">
+            <input
+              type="text"
+              ref={nameInputEl}
+              className="todo-input"
+              value={name}
+              placeholder="Enter your name"
+              onChange={(event) => setName(event.target.value)}
+            />
+          </form>
+          {name && <p className="name-label">Hello, {name}</p>}
+        </div>
         <h2>Todo App</h2>
         <TodoForm addTodo={addTodo} />
         {todos.length > 0 ? (
