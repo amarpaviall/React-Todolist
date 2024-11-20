@@ -4,6 +4,7 @@ import RemainingItems from "./RemainingItems";
 import TodoCheckAll from "./TodoCheckAll";
 import TodoClearCompleted from "./TodoClearCompleted";
 import TodoFilters from "./TodoFilters";
+import useToggle from "../hooks/useToggle";
 
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
@@ -19,6 +20,8 @@ TodoList.propTypes = {
 };
 
 function TodoList(props) {
+  const [isFeaturesOneVisible, setFeaturesOneVisible] = useToggle();
+  const [isFeaturesTwoVisible, setFeaturesTwoVisible] = useToggle(false);
   const [filter, setFilter] = useState("all");
   return (
     <>
@@ -78,23 +81,36 @@ function TodoList(props) {
           </li>
         ))}
       </ul>
+      <div className="toggle-container">
+        <button onClick={setFeaturesOneVisible} className="button cust-button">
+          Features One Toggle
+        </button>
+        <button onClick={setFeaturesTwoVisible} className="button">
+          Features Two Toggle
+        </button>
+      </div>
 
-      <div className="check-all-container">
-        <div>
-          <TodoCheckAll checkAll={props.checkAll} />
+      {isFeaturesOneVisible && (
+        <div className="check-all-container">
+          <div>
+            <TodoCheckAll checkAll={props.checkAll} />
+          </div>
+          <RemainingItems remainingItems={props.remainingItems} />
         </div>
-        <RemainingItems remainingItems={props.remainingItems} />
-      </div>
-      <div className="other-buttons-container">
-        <TodoFilters
-          filters={props.filters}
-          filter={filter}
-          setFilter={setFilter}
-        />
-        <div>
-          <TodoClearCompleted clearCompleted={props.clearCompleted} />
+      )}
+
+      {isFeaturesTwoVisible && (
+        <div className="other-buttons-container">
+          <TodoFilters
+            filters={props.filters}
+            filter={filter}
+            setFilter={setFilter}
+          />
+          <div>
+            <TodoClearCompleted clearCompleted={props.clearCompleted} />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
