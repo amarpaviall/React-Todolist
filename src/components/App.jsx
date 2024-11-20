@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import NoTodos from "./NoTodos";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
@@ -98,9 +98,11 @@ function App() {
     setTodos(updatedTodos);
   }
 
-  function remainingItems() {
+  function remainingItemsCalculations() {
     return todos.filter((todo) => !todo.isComplete).length;
   }
+
+  const remainingItems = useMemo(remainingItemsCalculations, [todos]);
 
   function checkAll() {
     const updatedTodos = todos.map((todo) => {
@@ -127,6 +129,9 @@ function App() {
   useEffect(() => {
     //console.log("use effect");
     nameInputEl.current.focus(); // focus on current element that is name input
+    return () => {
+      // Cleanup logic here if needed
+    };
   }, []); // Empty dependency array means this runs once when mounted
   return (
     <div className="todo-app-container">
